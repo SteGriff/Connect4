@@ -187,73 +187,13 @@ namespace Connect4
 
             return null;
         }
-
-        private Direction GetDirection(Counter thisCounter)
-        {
-            var directionIndicators = GetNeighbours(thisCounter);
-
-            foreach (var d in directionIndicators)
-            {
-                if (d.Value != null && thisCounter.Owner.Owns(d.Value))
-                {
-                    return d.Key;
-                }
-            }
-
-            return Direction.Single;
-        }
-
-        private Counter GetNeighbour(Counter thisCounter, Direction direction)
-        {
-            var directionIndicators = GetNeighbours(thisCounter);
-            Counter neighbour;
-            try
-            {
-                neighbour = directionIndicators[direction];
-            }
-            catch (Exception)
-            {
-                neighbour = null;
-            }
-            return neighbour;
-        }
-
-        private Dictionary<Direction, Counter> GetNeighbours(Counter thisCounter)
-        {
-            var options = new Dictionary<Direction, Counter>();
-            try
-            {
-                options.Add(Direction.Right, _board[thisCounter.Left + 1, thisCounter.Top]);
-            }
-            catch (Exception) { }
-
-            try
-            {
-                options.Add(Direction.RightDown, _board[thisCounter.Left + 1, thisCounter.Top + 1]);
-            }
-            catch (Exception) { }
-
-            try
-            {
-                options.Add(Direction.Down, _board[thisCounter.Left, thisCounter.Top + 1]);
-            }
-            catch (Exception) { }
-
-            try
-            {
-                options.Add(Direction.LeftDown, _board[thisCounter.Left - 1, thisCounter.Top + 1]);
-            }
-            catch (Exception) { }
-
-            return options;
-        }
-
+        
         public int LineLength(Counter thisCounter, Direction direction)
         {
             if (direction == Direction.Single)
             {
                 //Direction not known
-                direction = GetDirection(thisCounter);
+                direction = thisCounter.GetDirection(_board);
                 if (direction == Direction.Single)
                 {
                     //Not connected to anything
@@ -263,7 +203,7 @@ namespace Connect4
             }
             else
             {
-                Counter next = GetNeighbour(thisCounter, direction);
+                Counter next = thisCounter.GetNeighbour(direction, _board);
                 //if the neighbour is empty or owned by a rival, end the line
                 if (next == null || !thisCounter.Owner.Owns(next))
                 {
