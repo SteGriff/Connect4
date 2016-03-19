@@ -28,7 +28,7 @@ namespace Connect4.Tests
 
             var game = new Game(7, 6);
             var counter = game.Drop(GetTestPlayer(), 2);
-            int actual = game.LineLength(counter, Direction.Single);
+            int actual = counter.LineLength(game.Board);
 
             Assert.AreEqual(expected, actual);
         }
@@ -44,7 +44,7 @@ namespace Connect4.Tests
             var leftCounter = game.Drop(player, 2);
             game.Drop(player, 3);
 
-            int actual = game.LineLength(leftCounter, Direction.Single);
+            int actual = leftCounter.LineLength(game.Board);
 
             Assert.AreEqual(expected, actual);
         }
@@ -62,7 +62,7 @@ namespace Connect4.Tests
             game.Drop(player, 4);
             game.Drop(player, 5);
 
-            int actual = game.LineLength(leftCounter, Direction.Single);
+            int actual = leftCounter.LineLength(game.Board);
 
             Assert.AreEqual(expected, actual);
         }
@@ -81,7 +81,7 @@ namespace Connect4.Tests
             //Second drop goes on top
             var topCounter =  game.Drop(player, 2);
 
-            int actual = game.LineLength(topCounter, Direction.Single);
+            int actual = topCounter.LineLength(game.Board);
 
             Assert.AreEqual(expected, actual);
         }
@@ -102,7 +102,7 @@ namespace Connect4.Tests
             //Last drop goes on top
             var topCounter = game.Drop(player, 2);
 
-            int actual = game.LineLength(topCounter, Direction.Single);
+            int actual = topCounter.LineLength(game.Board);
 
             Assert.AreEqual(expected, actual);
         }
@@ -125,11 +125,11 @@ namespace Connect4.Tests
             var topRightCounter = game.Drop(player, 3);
 
             //Check from [2] should return 1 because it can't scan upwards
-            int scanFrom2 = game.LineLength(leftCounter, Direction.Single);
+            int scanFrom2 = leftCounter.LineLength(game.Board);
             Assert.AreEqual(1, scanFrom2);
 
             //Check from [3] should return 2 as it scans down-and-left
-            int scanFrom3 =  game.LineLength(topRightCounter, Direction.Single);
+            int scanFrom3 = topRightCounter.LineLength(game.Board);
             Assert.AreEqual(2, scanFrom3);
         }
 
@@ -151,7 +151,7 @@ namespace Connect4.Tests
             game.Drop(rival, 3);
             game.Drop(player, 4);
 
-            int actual = game.LineLength(leftCounter, Direction.Single);
+            int actual = leftCounter.LineLength(game.Board);
 
             Assert.AreEqual(expected, actual);
         }

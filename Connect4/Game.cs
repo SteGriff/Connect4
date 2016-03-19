@@ -20,14 +20,14 @@ namespace Connect4
         private int _min;
         private int _max;
 
-        private Counter[,] _board;
+        public Counter[,] Board { get; private set; }
 
         public Game(int width, int height)
         {
             Width = width;
             Height = height;
 
-            _board = new Counter[Width, Height];
+            Board = new Counter[Width, Height];
             _messageTop = OriginTop + Height + 2;
 
             _min = 1;
@@ -67,7 +67,6 @@ namespace Connect4
                 Console.WriteLine();
                 thisPlayer.Setup();
                 Players.Add(i, thisPlayer);
-                
 
             }         
 
@@ -98,7 +97,7 @@ namespace Connect4
                     //Draw board content (blank or player counter)
                     Console.SetCursorPosition(OriginLeft + left, OriginTop + top);
 
-                    Counter c = _board[left, top];
+                    Counter c = Board[left, top];
                     if (c == null)
                     {
                         Console.Write(".");
@@ -155,10 +154,13 @@ namespace Connect4
 
             for (int y = Height - 1; y >= 0; y--)
             {
-                if (_board[x, y] == null)
+                if (Board[x, y] == null)
                 {
                     var counter = new Counter(x, y, p);
-                    _board[x, y] = counter;
+
+                    Board[x, y] = counter;
+                    p.Counters.Add(counter);
+
                     return counter;
                 }
             }
@@ -172,11 +174,11 @@ namespace Connect4
             {
                 for (int left = 0; left < Width; left++)
                 {
-                    if (_board[left, top] != null)
+                    if (Board[left, top] != null)
                     {
-                        var c = _board[left, top];
-                        int length = LineLength(c, Direction.Single);
-                        //Debug.WriteLine("{0} has a line of {1}", c.Owner.Name, length);
+                        var c = Board[left, top];
+                        int length = c.LineLength( Direction.Single, Board);
+                        
                         if (length == 4)
                         {
                             return c.Owner;
@@ -188,33 +190,6 @@ namespace Connect4
             return null;
         }
         
-        public int LineLength(Counter thisCounter, Direction direction)
-        {
-            if (direction == Direction.Single)
-            {
-                //Direction not known
-                direction = thisCounter.GetDirection(_board);
-                if (direction == Direction.Single)
-                {
-                    //Not connected to anything
-                    return 1;
-                }
-                return LineLength(thisCounter, direction);
-            }
-            else
-            {
-                Counter next = thisCounter.GetNeighbour(direction, _board);
-                //if the neighbour is empty or owned by a rival, end the line
-                if (next == null || !thisCounter.Owner.Owns(next))
-                {
-                    return 1;
-                }
-                return 1 + LineLength(next, direction);
-
-            }
-
-        }
-
         private void AnnounceTurn(Player p)
         {
             GoToMessages();

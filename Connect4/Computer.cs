@@ -10,15 +10,28 @@ namespace Connect4
     public class Computer : Player
     {
         private Random _random;
-
+        
         public Computer(int id) : base(id)
         { }
 
         public override int GetMove(int min, int max)
         {
+            
+
             int column = _random.Next(min, max);
             Thread.Sleep(1000);
             return column;
+        }
+
+        private Counter FindBestLineStart()
+        {
+            Counter best = null;
+            foreach(var c in Counters)
+            {
+                
+            }
+
+            return best;
         }
 
         public override void Setup()

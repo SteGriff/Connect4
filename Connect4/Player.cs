@@ -11,10 +11,12 @@ namespace Connect4
         public int Id { get; set; }
         public string Name { get; set; }
         public ConsoleColor Colour { get; set; }
+        public List<Counter> Counters { get; set; }
 
         public Player(int id)
         {
             Id = id;
+            Counters = new List<Counter>();
         }
 
         public abstract int GetMove(int min, int max);

@@ -78,5 +78,37 @@ namespace Connect4
 
             return options;
         }
+
+        public int LineLength(Counter[,] board)
+        {
+            return LineLength(Direction.Single, board);
+        }
+
+        public int LineLength(Direction direction, Counter[,] board)
+        {
+            if (direction == Direction.Single)
+            {
+                //Direction not known
+                direction = GetDirection(board);
+                if (direction == Direction.Single)
+                {
+                    //Not connected to anything
+                    return 1;
+                }
+                return LineLength(direction, board);
+            }
+            else
+            {
+                Counter next = GetNeighbour(direction, board);
+                //if the neighbour is empty or owned by a rival, end the line
+                if (next == null || !Owner.Owns(next))
+                {
+                    return 1;
+                }
+                return 1 + next.LineLength( direction, board);
+
+            }
+
+        }
     }
 }
