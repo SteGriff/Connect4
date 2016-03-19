@@ -34,11 +34,10 @@ namespace Connect4
             _max = Width;
 
             _totalPlayers = 2;
-
-            SetupPlayers();
+            
         }
 
-        private void SetupPlayers()
+        public void SetupPlayers()
         {
             Players = new Dictionary<int, Player>();
 
@@ -149,7 +148,7 @@ namespace Connect4
 
         }
 
-        public void Drop(Player p, int x)
+        public Counter Drop(Player p, int x)
         {
             //Fix offset
             x -= 1;
@@ -158,10 +157,13 @@ namespace Connect4
             {
                 if (_board[x, y] == null)
                 {
-                    _board[x, y] = new Counter(x, y, p);
-                    return;
+                    var counter = new Counter(x, y, p);
+                    _board[x, y] = counter;
+                    return counter;
                 }
             }
+
+            return null;
         }
 
         public Player Winner()

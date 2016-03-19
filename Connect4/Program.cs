@@ -12,6 +12,7 @@ namespace Connect4
         {
             var game = new Game(7, 6);
 
+            game.SetupPlayers();
             game.Play();
 
             Console.ReadLine();
