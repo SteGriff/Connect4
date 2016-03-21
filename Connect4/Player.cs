@@ -11,12 +11,15 @@ namespace Connect4
         public int Id { get; set; }
         public string Name { get; set; }
         public ConsoleColor Colour { get; set; }
-        public List<Counter> Counters { get; set; }
 
-        public Player(int id)
+        protected List<Counter> Counters { get; private set; }
+        protected Game Game { get; set; }
+
+        public Player(int id, Game game)
         {
             Id = id;
             Counters = new List<Counter>();
+            Game = game;
         }
 
         public abstract int GetMove(int min, int max);
@@ -33,6 +36,11 @@ namespace Connect4
         public bool Owns(Counter counter)
         {
             return counter.Owner == this;
+        }
+
+        public void GiveCounter(Counter counter)
+        {
+            Counters.Add(counter);
         }
 
     }

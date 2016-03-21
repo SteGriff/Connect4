@@ -8,7 +8,7 @@ namespace Connect4
 {
     public class Human : Player
     {
-        public Human(int id) : base(id)
+        public Human(int id, Game game) : base(id, game)
         { }
 
         public override int GetMove(int min, int max)

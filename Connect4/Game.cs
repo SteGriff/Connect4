@@ -51,12 +51,12 @@ namespace Connect4
                     var key = Console.ReadKey();
                     if (key.Key == ConsoleKey.H)
                     {
-                        thisPlayer = new Human(i);
+                        thisPlayer = new Human(i, this);
                         break;
                     }
                     else if (key.Key == ConsoleKey.R)
                     {
-                        thisPlayer = new Computer(i);
+                        thisPlayer = new Computer(i, this);
                         break;
                     }
 
@@ -159,7 +159,7 @@ namespace Connect4
                     var counter = new Counter(x, y, p);
 
                     Board[x, y] = counter;
-                    p.Counters.Add(counter);
+                    p.GiveCounter(counter);
 
                     return counter;
                 }
@@ -177,7 +177,7 @@ namespace Connect4
                     if (Board[left, top] != null)
                     {
                         var c = Board[left, top];
-                        int length = c.LineLength( Direction.Single, Board);
+                        int length = c.LineLength(Board);
                         
                         if (length == 4)
                         {

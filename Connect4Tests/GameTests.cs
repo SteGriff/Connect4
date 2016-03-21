@@ -11,14 +11,14 @@ namespace Connect4.Tests
     [TestClass()]
     public class GameTests
     {
-        public Player GetTestPlayer()
+        public Player GetTestPlayer(Game g)
         {
-            return new Human(0);
+            return new Human(0, g);
         }
 
-        public Player GetTestRival()
+        public Player GetTestRival(Game g)
         {
-            return new Human(1);
+            return new Human(1, g);
         }
 
         [TestMethod()]
@@ -27,7 +27,7 @@ namespace Connect4.Tests
             int expected = 1;
 
             var game = new Game(7, 6);
-            var counter = game.Drop(GetTestPlayer(), 2);
+            var counter = game.Drop(GetTestPlayer(game), 2);
             int actual = counter.LineLength(game.Board);
 
             Assert.AreEqual(expected, actual);
@@ -39,7 +39,7 @@ namespace Connect4.Tests
             int expected = 2;
 
             var game = new Game(7, 6);
-            var player = GetTestPlayer();
+            var player = GetTestPlayer(game);
 
             var leftCounter = game.Drop(player, 2);
             game.Drop(player, 3);
@@ -55,7 +55,7 @@ namespace Connect4.Tests
             int expected = 4;
 
             var game = new Game(7, 6);
-            var player = GetTestPlayer();
+            var player = GetTestPlayer(game);
 
             var leftCounter = game.Drop(player, 2);
             game.Drop(player, 3);
@@ -73,7 +73,7 @@ namespace Connect4.Tests
             int expected = 2;
 
             var game = new Game(7, 6);
-            var player = GetTestPlayer();
+            var player = GetTestPlayer(game);
 
             //First drop goes to the bottom
             game.Drop(player, 2);
@@ -92,7 +92,7 @@ namespace Connect4.Tests
             int expected = 4;
 
             var game = new Game(7, 6);
-            var player = GetTestPlayer();
+            var player = GetTestPlayer(game);
 
             //First drops go to the bottom
             game.Drop(player, 2);
@@ -116,8 +116,8 @@ namespace Connect4.Tests
             //
 
             var game = new Game(7, 6);
-            var player = GetTestPlayer();
-            var rival = GetTestRival();
+            var player = GetTestPlayer(game);
+            var rival = GetTestRival(game);
 
             var leftCounter = game.Drop(player, 2);
             game.Drop(rival, 3);
@@ -134,6 +134,39 @@ namespace Connect4.Tests
         }
 
         [TestMethod()]
+        public void BackSlashWithLength4()
+        {
+            // 1234567
+            // O
+            // XO
+            // XXO
+            // XXXO
+
+            var game = new Game(7, 6);
+            var player = GetTestPlayer(game);
+            var rival = GetTestRival(game);
+
+            game.Drop(rival, 1);
+            game.Drop(rival, 1);
+            game.Drop(rival, 1);
+
+            game.Drop(rival, 2);
+            game.Drop(rival, 2);
+
+            game.Drop(rival, 3);
+
+            var leftCounter = game.Drop(player, 1);
+            game.Drop(player, 2);
+            game.Drop(player, 3);
+            game.Drop(player, 4);
+
+            int expected = 4;
+            int actual = leftCounter.LineLength(game.Board);
+            Assert.AreEqual(expected, actual) ;
+        }
+
+
+        [TestMethod()]
         public void RivalCountersNotCountedInLine()
         {
             // 234
@@ -144,8 +177,8 @@ namespace Connect4.Tests
             int expected = 1;
 
             var game = new Game(7, 6);
-            var player = GetTestPlayer();
-            var rival = GetTestRival();
+            var player = GetTestPlayer(game);
+            var rival = GetTestRival(game);
 
             var leftCounter = game.Drop(player, 2);
             game.Drop(rival, 3);
